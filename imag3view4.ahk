@@ -1,0 +1,520 @@
+﻿PiD:= DllCall("GetCurrentProcessId")
+(imgv_instance:= winexist("imgvi3w4 ahk_class AutoHotkeyGUI",,"ahk_pid " . PID)? exitapp())
+if (!instr(A_AhkPath,"UIA")&&!A_IsCompiled){
+	Run, %A_AhkPath%\..\AutoHotkeyU64_UIA.exe "%A_ScriptFullPath%" "%1%"
+	ExitApp
+}
+menu,tray,icon
+ListLines,Off
+Setworkingdir,% (ahkexe:= splitpath(A_AhkPath)).dir 	;
+#NoEnv ; #IfTimeout,200 ;* DANGER * : Performance impact if set too low. *think about using this*.
+#NoTrayIcon
+#SingleInstance,Force
+DetectHiddenWindows,On
+DetectHiddenText,	On
+SetTitleMatchMode,	2
+SetTitleMatchMode	Slow
+SetBatchLines,		-1
+SetWinDelay,		-1
+coordMode,	ToolTip,Screen
+coordmode,	Mouse,	Screen
+
+loop,parse,% "Reg_Read,Varz,Menus,Binds,opt_enact",`,
+	gosub(A_loopfield)
+onexit,	Leave_
+
+#include <win>
+#include C:\Script\AHK\- _ _ LiB\GDI+_All.ahk ;#include <GDI+_All>   ;#include <Taskbar>
+#include <OpenContaining> ;#include C:\Script\AHK\z_ConTxt\GDIP.ahk
+
+ OnMessage(0x0204,"WM_lRBUTTONDOWN")
+ OnMessage(0x0205,"WM_lrBUTTONUP")
+ OnMessage(0x0201,"WM_LrBUTTONDOWN")
+ OnMessage(0x0202,"WM_LrBUTTONUP")
+ OnMessage(0x0404,"AHK_NOTIFYICON")
+ OnMessage(0x00A1,"WM_NCLBUTTONDOWN")
+ OnMessage(0x0101,"WM_KEYUP")
+opt_Anchor:= True ; anchor session to position last used.
+
+ftypes:= ["png","jpg","gif","bmp","ico","xcf","tiff","cur","ani"]
+
+keys:= "~wheelup,~wheeldown,~left,~right,~wheelleft,~wheelright,~=,~-,~#r"
+
+ %0% ? ImagePath:= A_Args[1] : ()
+hotkey,~escape,guiescape,on
+main(ImagePath)
+return,
+
+Main(Path2Pic1) {
+	Curr_i:= Xcrete("","Preparse","",Path2Pic1)
+	Xcrete(Curr_i) ; Xcrete( Curr_i - 1) ; Xcrete( Curr_i + 1)
+	Xcrete(Curr_i,"upd8")
+	return,
+}
+
+Xcrete(i="",lab3l="",h_key="",inp4th="") {
+	global
+	if !Xcret10n {
+		keys:= "~wheelup,~wheeldown,~wheelleft,~wheelright,~=,~-,~#r"
+		loop,parse,keys,`,
+			hotkey,% a_loopfield,keys_labl,on
+		Xcret10nnit:= True
+	}
+	if lab3l {
+		goto,% lab3l
+		return,
+	} else try {
+		critical
+		IF OPT_BENCHMARK 
+			a_scriptStartTime:= a_tickCount
+		gui,pic: New,-DPIScale +ParentPwner +AlwaysOnTop +ToolWindow ;+E0x80000 ,
+		gui,pic: +LastFound -Caption -SysMenu +OwnDialogs
+		hwnd_pic:=	WinExist(), Curr_File:= pic_arr[oio:= i].CurrPath
+		pToken:= Gdip_Startup()
+		try,pBitmap:=	Gdip_CreateBitmapFromFile(Curr_File)
+		CURRENT_W:=	Gdip_GetImageWidth( pBitmap)
+	 	CURRENT_H:=	Gdip_GetImageHeight(pBitmap)
+		pImage:= Gdip_CreateBitmap(CURRENT_W *wscale:= 1, CURRENT_H *hscale:= 1)
+		G2:= Gdip_GraphicsFromImage(pImage)
+		Gdip_DrawImage(G2,pBitmap,0,0,CURRENT_W *wscale,CURRENT_H *hscale,0,0,CURRENT_W,CURRENT_H)
+		Gdip_SetInterpolationMode(G2,1)
+		Gdip_SetSmoothingMode(G2,1)
+		if (x10n = "ico")
+			goto,DC_stuff
+		else,if opt_MaxFill || if opt_ShrinkFill
+			goto,shrinkxpand
+		else,if ((CURRENT_W) > a_screenwidth  &&  (CURRENT_H) > a_screenheight)
+			goto,shrinkxpand
+		else,goto,DC_stuff
+			return,
+;-------------------------------------------------------------------
+		shrinkxpand:
+		rw:= (a_screenwidth /(CURRENT_W)), rh:= (a_screenheight/(CURRENT_H))
+		CURRENT_H:= rw<rh? floor(rw*(CURRENT_H)) : a_screenheight
+		CURRENT_W:= rw<rh? a_screenwidth : floor(rh*(CURRENT_W))
+		hi:= ("h" . round(CURRENT_H)), wi:= ("w" . round(CURRENT_W))
+
+		DC_stuff:
+		mDC:=	Gdi_CreateCompatibleDC(0)
+		mBM:=	Gdi_CreateDIBSection((mDC),CURRENT_W,CURRENT_H,32)
+		oBM:=	Gdi_SelectObject(mDC, mBM)
+		pG_:=	Gdip_CreateFromHDC(mDC)
+		try,Gdip_DrawImageRECTI(pG_,pImage,0,0,CURRENT_W,CURRENT_H)
+		option_zpostopmost:= true ;testing
+		option_zpostopmost? gui_zpos:= "+AlwaysOnTop" : gui_zpos:= ""
+		option_noactiv8:= false ;testing
+		option_noactiv8? gui_noactiv8:= "NA" : gui_noactiv8:= ""
+		option_posallCenter:= true ;testing
+		option_posallCenter? gui_pos := "Center" : ()
+		gui,Pwner:-Caption %gui_zpos%
+		return,
+
+		inratio:
+		;if (CURRENT_H<a_screenheight)
+		loop {
+			if ((CURRENT_H*a_index)> a_screenheight )
+			{
+			multipliera:= a_index - 1
+				break,
+			}
+		} ;	if (CURRENT_W<a_screenwidth)
+		loop
+			if ((CURRENT_H*a_index)> a_screenwidth ) {
+				multiplierb:= a_index - 1
+				break,
+			}
+		result:= (multipliera<multiplierb) ? multipliera : multiplierb
+		old_H:= CURRENT_H, old_W:= CURRENT_W
+		hi:= ("h" .	round(CURRENT_H*=result) ) ; hi:=  ("h" . round(CURRENT_H))
+		wi:= ("w" .	round(CURRENT_W*=result) ) ; wi:=  ("w" . round(CURRENT_W))
+	}
+	return,
+
+	Preparse:
+	pic_arr:= {}, xcent:= (a_screenwidth *.5), ycent:= (a_screenheight *.5)
+	SplitPath,inp4th,Starting_file,Image_dir,x10n,Image_Title
+	setWorkingDir,% Image_dir
+	Recurse:= "R",	Paths:= ""
+	gui,	Pwner:New,,% "imgvi3w4"
+	gui,	Pwner:+LastFound -Caption -DPIScale +ToolWindow +E0x80000 +HWNDhGui  ; hGui := WinExist()
+	Loop,	Files,% Image_dir "\*.*",% Recurse
+	{	; Trim(A_LoopFileFullPath) "'"
+		targetpath	:=	LTrim(A_LoopFileFullPath)
+		targetpath	:=	RTrim(targetpath)
+	 if targetpath {
+			SplitPath, A_LoopFileFullPath , , , xTnz0n
+					switch xTnz0n {
+						case "png","jpg","gif","bmp","ico","xcf","tiff","cur","ani":
+							pic_arr[ a_index ]:= ({"CurrPath" : A_LoopFileFullPath : "xtn" : xTnz0n })
+							 if(A_LoopFileName = Starting_file) ;if(A_LoopFileFullPath = inp4th)
+								  oio:=  a_index ; paths .= A_LoopFileFullPath . "`n"
+					}
+				Max_i:=  a_index
+		} else,msgbox,error
+	} ;msgbox % paths
+
+	(!Max_i? msgb0x("Error!", "Error no max`n:("))	;gui, Pwner: Add, Button, xp y+10 w80 h24 gpl_wib hwndhwndPlayPause, Pause
+	return,oio
+
+	upd8:	; tt(  pic_arr[oio] "`n" wwi "`n" hhi "`n" )
+	if ((_netnx>a_screenwidth) && (_netny>a_screenheight)) {
+			_Netnx:=0
+			_Netny:=0
+		}
+	;if !(_nx=0)&&!(_ny=0) 
+		gpos:= wingetpos(hgui)
+	(netx?netxold2:= netx), (nety?netyold2:= nety)
+	(!(_nx -gpos.x =0)?netx:=_nx -gpos.x)
+	(!(_ny -gpos.y =0)?nety:=_ny -gpos.y)
+	_nxold:=_nx, _nyold:=_ny
+	CURRENT_W_old:= CURRENT_W
+	CURRENT_h_old:= CURRENT_H
+	_nx:= round(xcent -(CURRENT_W*0.5))
+	_ny:= round(ycent -(CURRENT_H*0.5)) ; center alignment
+	if (opt_movecenter) {  ;&& !(_Netnx="") && !(_Netny=""))
+		 _nx -=Netx
+		(_nx>a_screenwidth-CURRENT_W)?_nx:=a_screenwidth-CURRENT_W
+		(_nx<0)?_nx:=0
+		_ny -= Nety ; msgbox % _Netnx "`n" _nx
+		(_ny>a_screenheight-CURRENT_h)?_ny:=a_screenheight-CURRENT_h
+		(_ny<0)?_ny:=0
+	}
+	DllCall("UpdateLayeredWindow", "Uint", hGui, "Uint", 0, "Uint", 0, "int64P", CURRENT_W|CURRENT_H<<32
+	, "Uint", mDC, "int64P", 0, "Uint", 0,    "intP", 0xFF<<16|1<<24, "Uint", 2) ;msgbox % _nx " " _nY
+	gui,Pwner: Show,%gui_noactiv8% x%_nx% y%_ny% w%CURRENT_w% h%CURRENT_H%
+	IF OPT_BENCHMARK {
+		_:= (a_tickCount-a_scriptStartTime) . " Ms"
+		TT(_)
+	}
+
+	delete:
+	GDI_SelectObject(mDC,oBM)
+	Gdi_DeleteObject(mBM) ;Gdi_DeleteDC(mDC)
+	Gdip_DeleteGraphics(g2)
+	Gdip_DisposeImage(pImage)
+	Gdip_DisposeImage(pbitmap)
+	return,
+
+	old_delete:
+	gui, pic:destroy
+	Gdip_Shutdown(pToken)
+	return,
+
+	keys_lablL:
+	MouseGetPos,,,OWin,OControl ; 1|2|3
+	((OWin = hGui)? hovered:=True : (hovered:=False))
+	(!h_key?	msgb0x("error"))
+	(instr(h_key, "~")? h_key:= strreplace(h_key,"~"):(h_key:= h_key))
+	iOLD2 := iOLD1,	iOLD1 := oio ; msgbox % hGui " " hovered
+	ifwinNotActive, ahk_id %hGui%
+		&& if !hovered
+			return,
+
+	switch h_key { ;case  "NumpadAdd":
+		case "=": opt_MaxFill:=!opt_MaxFill
+		(opt_MaxFill? nety? (netyTemp:= nety,nety := 0) :
+		, (netyTemp?nety:= netyTemp)) ;keeps x offset when maximized	
+		case "-": opt_ShrinkFill:=!opt_ShrinkFill
+		case "right","wheeldown": curr_i:= refrec(1) ;curr_i:= (oio<Max_i? oio += 1 : oio:= 1)
+			return
+		case "^right","~^wheeldown","~^wheelright": curr_i:= refrec(5) ;curr_i:= (oio<Max_i? oio += 5 : oio:= 1)
+			return
+		case "left","~wheelup","wheelup": curr_i:= refrec(-1) ;curr_i:= (oio>0? oio -= 1 : oio:= Max_i)
+			return,
+		case "^left","~^wheelup","~^wheelleft": curr_i:= refrec(-5)
+			return,
+		case "delete":
+			ifwinnotActive,ahk_id %hGui%
+				return,
+			FileRecycle,% pic_arr[oio].CurrPath
+			tt(pic_arr[oio].CurrPath "`nSent to the recycle bin", 1300)
+			return,
+		case	 "#r":
+			reload,
+	}
+
+	switch pic_arr[oio].xtn {
+		case "ico":
+			tt("ico file", 3000)
+		case "gif":
+			tt("gif file", 3000)
+		case "default":
+			tt(pic_arr[oio].xtn " file.")
+	}
+	Xcrete(oio)
+	Xcrete(oio,"upd8")
+	(!(iold2 = oio)?Xcrete(iOLD2,"old_delete"))
+	return,
+}
+
+WM_lrBUTTONDOWN(wParam, lParam,byref RECT, mDC) {
+	global lbutton_cooldown,lbd,sometrigger:= true	; tt("LB: D")
+	xs := lParam & 0xffff,	ys := lParam >> 16
+	pToken00:=Gdip_Startup() ; msgbox % mDC
+	   mDC00:=Gdi_CreateCompatibleDC(0)
+	DllCall("gdi32.dll\SetStretchBltMode","Uint",mDC,"int",1)
+	DllCall("gdi32.dll\StretchBlt","UInt",mDC00,"Int",0,"Int",0,"Int"
+	,CURRENT_W,"Int",CURRENT_h,"UInt",mDC%oio%, "UInt",0
+	,"UInt",0,"Int",0.5*CURRENT_W,"Int",CURRENT_h,"UInt",0x00CC0020)  ; SRCCOPY=0x00CC0020
+	DllCall("UpdateLayeredWindow","Uint",hGui,"Uint", 0,"Uint",0,"int64P"
+	,CURRENT_W|CURRENT_H<<32
+	,"Uint",mDC00,"int64P",0,"Uint",0,"intP",0xFF<<16|1<<24,"Uint",2) ; msgbox % _nx " " _nY
+	settimer, disgrace, -40
+	timer("lbutton_cooldown_reset",-400)
+
+	While,(LbD:=GetKeyState("lbutton","P") || lbd:=GetKeyState("lbutton","P")) {
+		DllCall( "GetCursorPos","Uint",&RECT)
+			sleep,4
+		win_move(hgui,(NumGet(&RECT,0,"Int") - xs),(NumGet(&RECT,4,"Int") - ys),CURRENT_W,CURRENT_H,0x4001) ; DllCall("MoveWindow",  "Uint",hwnd1,"int",vWinX,"int",vWiny,"int",rw,"int",rh,"Int",2) #
+		if sometrigger
+			settimer,grace,-400
+		if !lbd {
+			settimer WM_lrBUTTONup,-150
+			return,0
+		}
+	}
+
+	grace:
+	sometrigger:= true
+	return,
+
+	disgrace:
+	sometrigger:= false
+	return,
+}
+
+
+WM_lrBUTTONup(wParam="", lParam="") { 	;toggles maximise fill
+	global sometrigger, LbD:=""
+	if !sometrigger {
+		settimer,menu,-1
+		return,
+}	}
+
+WM_LBUTTONDBLCLK(wParam, lParam,byref RECT, mDC) {
+	global lbutton_cooldown_reset,oio,Curr_File
+	if !lbutton_cooldown_reset {
+		opt_MaxFill:=!opt_MaxFill
+		main(Curr_File)
+		return,
+		;tt("Placeholder - toggle some size change or zoom to predefined coord?")
+		;toggle bg col	}
+	}
+	opt_MaxFill:=!opt_MaxFill
+	main(Curr_File)
+	tt("LB: U")
+}
+
+WM_RBUTTONDOWN(byref wParam,byref lParam,byref RECT) {
+tt("aadawad")
+ global hGui,rbutton_cooldown:=false
+	settimer rbutton_cooldown_reset, -670
+	xs := lParam & 0xffff,	ys := lParam >> 16
+	DllCall("SetWindowBand", "ptr",hGui, "ptr", 0, "uint", 15)
+	tt(a_lasterror)
+	While,GetKeyState("rbutton","P") {
+		if !GetKeyState("rbutton","P")
+			return,
+		DllCall("GetCursorPos","Uint",&RECT)
+		vWinX:= NumGet(&RECT,0,"Int") - xs
+		vWinY:= NumGet(&RECT,4,"Int") - ys
+		win_move(hGui,vWinX,vWiny,"","","")
+		sleep,4
+}	}
+
+WM_NCLBUTTONDOWN(byref wParam="",byref lParam="") {
+	tt("GA")
+}
+
+WM_rBUTTONup(byref wParam="",byref lParam="") {
+	global Curr_File,rbutton_cooldown
+	OpenContaining(Curr_File)
+	settimer,rbutton_cooldown_reset,-1
+	(rbutton_cooldown="")? rbutton_cooldown:= false : ()
+		send,{rbutton up}
+}
+
+WM_KEYUP(wParam,lParam) {
+	global hWnd_Par
+	switch wParam {
+		case "37": curr_i:= refrec(-1) ;left arrow
+			sleep 40
+		case "39": curr_i:= refrec(1) ;r arrow
+			sleep 40
+		case "27 ": settimer,guiclose,-1 ;esc
+		case "13": ;enter
+			gui,par: submit,nohide
+			;gosub,editx
+			;gosub,edity
+			;gosub,Timertest2
+			send,{tab}
+		default: tt(wParam "`n" Format("{1:#x}",lParam))  ; case "":
+}	}
+
+
+refrec(incdec=0) {
+	global
+	if (incdec<0)
+		 curr_i:= ((oio>abs(incdec))? oio += incdec : (oio:= Max_i))
+	else,curr_i:= ((oio<(Max_i))? oio += incdec : (oio:= 1))
+	Xcrete(curr_i)
+	sleep.20
+	Xcrete(oio,"upd8")
+	(!(iold2 = oio)?Xcrete(iOLD2,"old_delete"))
+	return,curr_i
+}
+
+keys_labl:
+Xcrete(Curr_i, ( a_thislabel . "L" ), a_thishotkey)
+return,
+
+opt_enact:
+if opt_movecenter {
+	menu,Tray,icon,% "preserve position characteristics",% "C:\Icon\256\ticAMIGA.ico" 
+} else {
+	menu,Tray,icon,% "preserve position characteristics",% ""
+}
+return,
+
+rbutton_cooldown_reset:
+lbutton_cooldown_reset:
+StringTrimRight,resetwhich,a_thislabel,6
+(%resetwhich%):= False
+return,
+
+lbutton_cooldown_reset_thrice:
+rbutton_cooldown_reset_thrice:
+StringTrimRight,resetwhich,a_thislabel,6
+loop,3 {
+	(%resetwhich%):= False
+	settimer,% resetwhich . "_reset",off
+	sleep,25
+}
+return,
+
+reg_read:
+loop,parse,% ( Options := "opt_ShrinkFill,opt_MaxFill,alignment,recurse" ),`,
+	regread, %a_loopfield%,% r3gk3y,%a_loopfield%
+return,
+
+reg_WRite:
+alignment:="center"
+loop,parse,% ( Options:= "opt_ShrinkFill,opt_MaxFill,alignment,recurse" ),`,
+	regwrite,% "REG_SZ",% r3gk3y,% a_loopfield,% %a_loopfield%
+return,
+
+escape::
+GuiClose:
+GuiEscape:
+opacity:= 255
+DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P",CURRENT_W|CURRENT_H<<32
+, "Uint",mdc,"int64P",0,"Uint", 0,"intP",(opacity--)<<16|1<<24,"Uint",2) ;msgbox % _nx " " _nY
+win_move(hGui,_nx +1,_ny +1,"","","")
+loop 60 {
+	(opacity<10? opacity:=10)
+	win_move(hGui,_nx+(a_index **2.5),_ny +a_index *2,"","","")
+	DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P",CURRENT_W|CURRENT_H<<32
+	, "Uint",mdc,"int64P",0,"Uint",0,"intP",(opacity-=6.6)<<16|1<<24,"Uint",2) ;msgbox % _nx " " _nY
+}
+sleep,500
+exitapp,
+
+binds:
+#maxhotkeysPerInterval,1440
+keys:= "~wheelup,~wheeldown,~left,~right,~wheelleft,~wheelright,~=,~-,~#r"
+loop,parse,keys,`,
+	hotkey,%a_loopfield%,keys_labl
+return,
+
+AHK_NOTIFYICON(wParam,lParam) {
+	switch lParam {
+	;	case 0x0206: 	; WM_RBUTTONDBLCLK
+	;	case 0x020B:	; WM_XBUTTONDOWN
+		case 0x0201: 	; WM_LBUTTONDOWN
+	return,
+	;	case 0x0202: 	; WM_LBUTTONUP
+		case 0x0204: 	; WM_RBUTTONUP
+			Menu,Tray,Show
+		case 0x0203:		; WM_LBUTTONDBLCLK
+			timer("ID_VIEW_VARIABLES",-1)
+			tt("Loading...","tray",1)
+		case 0x0208:	; WM_MBUTTONUP
+			timer("ID_TRAY_RELOADSCRIPT",-1)
+			tt("Reloading...","tray",1)
+}	}
+
+ID_TRAY_RELOADSCRIPT:
+global ID_TRAY_RELOADSCRIPT:= 65303
+ID_TRAY_EDITSCRIPT:
+global ID_TRAY_EDITSCRIPT:= 65304
+ID_VIEW_VARIABLES:
+global ID_VIEW_VARIABLES:= 65407
+ID_TRAY_SUSPEND:
+global ID_TRAY_SUSPEND:= 65305
+ID_TRAY_PAUSE:
+global ID_TRAY_PAUSE:= 65306
+ID_TRAY_EXIT:
+global ID_TRAY_EXIT:= 65307
+PostMessage,0x0111,(%A_Thislabel%),,,% A_ScriptName " - AutoHotkey"
+return,		;PostMessage,65307,%open%,,,% A_ScriptName " - AutoHotkey"
+
+
+MenHandla(){
+	switch A_thismenuitem {
+		case "preserve position characteristics": opt_movecenter:= !opt_movecenter
+		if opt_movecenter
+			menu,Tray,icon,% "Move Center",% "C:\Icon\256\ticAMIGA.ico"
+		else,menu,Tray,icon,% ""
+}	}
+
+menu() {
+	menu,new,add, testmenu, donothing
+	menu,new,show
+}
+
+menus:
+menu,Tray,NoStandard
+menu,Tray,icon,% "C:\Icon\256\eyedfyeye.ico"
+menu,Tray,Add ,% "Open",			ID_VIEW_VARIABLES
+menu,Tray,Icon,% "Open",%			"C:\Icon\24\Gterminal_24_32.ico"
+menu,Tray,Add,% "preserve position characteristics", MenHandla
+if opt_movecenter
+ menu,Tray,icon,% "preserve position characteristics",% "C:\Icon\256\ticAMIGA.ico"
+if !A_IsCompiled {
+ menu,Tray,Add ,% "Edit Script",		ID_TRAY_EDITSCRIPT
+ menu,Tray,Icon,% "Edit Script",%	"C:\Icon\24\explorer24.ico"
+}
+menu,Tray,Add ,% "Reload",			ID_TRAY_RELOADSCRIPT
+menu,Tray,Icon,% "Reload",%			"C:\Icon\24\eaa.bmp"
+menu,Tray,Add ,% "Suspend VKs",		ID_TRAY_SUSPEND
+menu,Tray,Icon,% "Suspend VKs",%	"C:\Icon\24\head_fk_a_24_c1.ico"
+menu,Tray,Add ,% "Pause",			ID_TRAY_PAUSE
+menu,Tray,Icon,% "Pause",%			"C:\Icon\24\head_fk_a_24_c2b.ico"
+menu,Tray,Add ,% "Exit",			ID_TRAY_EXIT
+menu,Tray,Icon,% "Exit",%			"C:\Icon\24\head_fk_a_24_c2b.ico"
+return,
+
+Varz:
+global hgui,RECT,Xcret10nnit,Image_Title,ImagePath,x10n,CURRENT_H,CURRENT_W,Pwner,option_allCenter,pic_arr,Options,Curr_i,hovered,OWin,OControl,hGui,hovered,RECT,mdc,lbutton_click_thresh,rbutton_cooldown,turds,Curr_i,Starting_file,OutNameNoExt,_i_ndx_,Max_i,Curr_iOLD1,Curr_iOLD2,Options,pic0,pic1,pic2,xcent,ycent,repent,hi,wi,Recurse,opt_MaxFill,opt_ShrinkFill,alignment,ren,hovered,keys,r3gk3y,ID_VIEW_VARIABLES:=65407,ID_TRAY_EDITSCRIPT:=65304,ID_TRAY_SUSPEND:=65305,ID_TRAY_PAUSE:=65306.ID_TRAY_EXIT:=65307,ID_TRAY_RELOADSCRIPT:=65303,_nx:=0,_ny:=0,_Netnx:=0,_Netny:=0,netnxold,netnyold,netxt,netyTemp,netx,nety,opt_Anchor,ftypes,keys,sometrigger
+, r3gk3y:="HKCU\SOFTWARE\_MW\image_view"
+, opt_movecenter:= True ;testing
+
+VarSetCapacity(RECT,16)
+
+if !ImagePath && If (!FileExist(ImagePath:=A_AppData "\" ScriptName "\appifyerFrame.png"))
+	ImagePath := remoteResource("appifyerFrame.png", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Modern_AutoHotkey_Logo_%28no_text%29.svg/330px-Modern_AutoHotkey_Logo_%28no_text%29.svg.png")
+
+return,
+
+donothing:
+return,
+
+leave_:
+gui,pic:	hide
+gui,Pwner:	hide
+gui,Pic:	destroy
+gui,Pwner:	destroy
+gosub,reg_WRite
+exitapp,
+loop,2
+	sleep,500
