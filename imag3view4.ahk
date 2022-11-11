@@ -109,11 +109,11 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 
 		inratio:
 		loop 
-			if ((CURRENT_H*a_index)> a_screenheight )m{
-			multipliera:= a_index - 1
+			if ((CURRENT_H*a_index)> a_screenheight ) {
+				multipliera:= a_index - 1
 				break,
 			}
-		loop
+		loop,
 			if ((CURRENT_H*a_index)> a_screenwidth ) {
 				multiplierb:= a_index - 1
 				break,
@@ -141,7 +141,7 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 					switch xTnz0n {
 						case "png","jpg","gif","bmp","ico","xcf","tiff","cur","ani":
 							pic_arr[ a_index ]:= ({"CurrPath" : A_LoopFileFullPath : "xtn" : xTnz0n })
-							 if(A_LoopFileName = Starting_file) ;if(A_LoopFileFullPath = inp4th)
+							 if(A_LoopFileFullPath = inp4th) ;if(A_LoopFileFullPath = inp4th)
 								  oio:=  a_index ; paths .= A_LoopFileFullPath . "`n"
 					}
 				Max_i:=  a_index
