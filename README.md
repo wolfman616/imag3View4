@@ -8,9 +8,13 @@ somehwere around 40ms to load and display a full screen png from disk
 extremely small memory impact, around 10-40 mb at 4k after viewing 100 images
 
 alphachannel intact.
+
 optionally rescale keeping pixel ratio whole
+
 UI band.
+
 mouse movable
+
 position anchor when viewing consecutive images (mouse wheel up down to increment and decrement through the surrounding image files optionally recusive*)
 
 
