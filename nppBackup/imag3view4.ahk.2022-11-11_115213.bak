@@ -1,16 +1,16 @@
-﻿#NoTrayIcon
-#SingleInstance,Force
-PiD:= DllCall("GetCurrentProcessId")
+﻿PiD:= DllCall("GetCurrentProcessId")
 (imgv_instance:= winexist("imgvi3w4 ahk_class AutoHotkeyGUI",,"ahk_pid " . PID)? exitapp())
 if (!instr(A_AhkPath,"UIA")&&!A_IsCompiled) {
 	run,%A_AhkPath%\..\AutoHotkeyU64_UIA.exe "%A_ScriptFullPath%" "%1%"
-	exitApp,
+	ExitApp
 }
 menu,tray,icon
 ListLines,Off
 Setworkingdir,% (ahkexe:= splitpath(A_AhkPath)).dir 	;
 #NoEnv 
+#NoTrayIcon
 #IfTimeout,200 ;* DANGER * : Performance impact if set too low. *think about using this*.
+#SingleInstance,Force
 DetectHiddenWindows,On
 DetectHiddenText,	On
 SetTitleMatchMode,	2
@@ -22,22 +22,26 @@ coordmode,	Mouse,	Screen
 
 loop,parse,% "Reg_Read,Varz,Menus,Binds,opt_enact",`,
 	gosub(A_loopfield)
-onexit,Leave_
-onmessage(0x0204,"WM_lRBUTTONDOWN")
-onmessage(0x0205,"WM_lrBUTTONUP")
-onmessage(0x0201,"WM_LrBUTTONDOWN")
-onmessage(0x0202,"WM_LrBUTTONUP")
-onmessage(0x0404,"AHK_NOTIFYICON")
-onmessage(0x00A1,"WM_NCLBUTTONDOWN")
-onmessage(0x0101,"WM_KEYUP")
+onexit,	Leave_
 
+#include <win>
+#include C:\Script\AHK\- _ _ LiB\GDI+_All.ahk ;#include <GDI+_All>   ;#include <Taskbar>
+#include <OpenContaining> ;#include C:\Script\AHK\z_ConTxt\GDIP.ahk
+
+ OnMessage(0x0204,"WM_lRBUTTONDOWN")
+ OnMessage(0x0205,"WM_lrBUTTONUP")
+ OnMessage(0x0201,"WM_LrBUTTONDOWN")
+ OnMessage(0x0202,"WM_LrBUTTONUP")
+ OnMessage(0x0404,"AHK_NOTIFYICON")
+ OnMessage(0x00A1,"WM_NCLBUTTONDOWN")
+ OnMessage(0x0101,"WM_KEYUP")
 opt_Anchor:= True ; anchor session to position last used.
 
 ftypes:= ["png","jpg","gif","bmp","ico","xcf","tiff","cur","ani"]
 
 keys:= "~wheelup,~wheeldown,~left,~right,~wheelleft,~wheelright,~=,~-,~#r"
 
-%0%? ImagePath:= A_Args[1] : ()
+ %0% ? ImagePath:= A_Args[1] : ()
 hotkey,~escape,guiescape,on
 main(ImagePath)
 return,
@@ -62,26 +66,25 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 		return,
 	} else try {
 		critical
-		OPT_Benchmark? a_scriptStartTime:= a_tickCount : ()
+		IF OPT_BENCHMARK 
+			a_scriptStartTime:= a_tickCount
 		gui,pic: New,-DPIScale +ParentPwner +AlwaysOnTop +ToolWindow ;+E0x80000 ,
 		gui,pic: +LastFound -Caption -SysMenu +OwnDialogs
-		hwnd_pic:= WinExist(), Curr_File:= pic_arr[oio:=i].CurrPath
+		hwnd_pic:=	WinExist(), Curr_File:= pic_arr[oio:= i].CurrPath
 		pToken:= Gdip_Startup()
-		try,pBitmap:= Gdip_CreateBitmapFromFile(Curr_File)
+		try,pBitmap:=	Gdip_CreateBitmapFromFile(Curr_File)
 		CURRENT_W:=	Gdip_GetImageWidth( pBitmap)
 	 	CURRENT_H:=	Gdip_GetImageHeight(pBitmap)
-		pImage:= Gdip_CreateBitmap(CURRENT_W *wscale:= 1
-		, CURRENT_H *hscale:= 1)
+		pImage:= Gdip_CreateBitmap(CURRENT_W *wscale:= 1, CURRENT_H *hscale:= 1)
 		G2:= Gdip_GraphicsFromImage(pImage)
-		Gdip_DrawImage(G2,pBitmap,0,0,CURRENT_W *wscale
-		,CURRENT_H *hscale,0,0,CURRENT_W,CURRENT_H)
+		Gdip_DrawImage(G2,pBitmap,0,0,CURRENT_W *wscale,CURRENT_H *hscale,0,0,CURRENT_W,CURRENT_H)
 		Gdip_SetInterpolationMode(G2,1)
 		Gdip_SetSmoothingMode(G2,1)
-		if (x10n="ico")
+		if (x10n = "ico")
 			goto,DC_stuff
 		else,if opt_MaxFill || if opt_ShrinkFill
 			goto,shrinkxpand
-		else,if ((CURRENT_W) > a_screenwidth && CURRENT_H > a_screenheight)
+		else,if ((CURRENT_W) > a_screenwidth  &&  (CURRENT_H) > a_screenheight)
 			goto,shrinkxpand
 		else,goto,DC_stuff
 			return,
@@ -98,21 +101,24 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 		oBM:=	Gdi_SelectObject(mDC, mBM)
 		pG_:=	Gdip_CreateFromHDC(mDC)
 		try,Gdip_DrawImageRECTI(pG_,pImage,0,0,CURRENT_W,CURRENT_H)
-		opt_zpostopmost:= true ;testing
-		opt_zpostopmost? gui_zpos:= "+AlwaysOnTop" : gui_zpos:= ""
-		opt_noactiv8:= false ;testing
-		opt_noactiv8? gui_noactiv8:= "NA" : gui_noactiv8:= ""
-		opt_posallCenter:= true ;testing
-		opt_posallCenter? gui_pos := "Center" : ()
+		option_zpostopmost:= true ;testing
+		option_zpostopmost? gui_zpos:= "+AlwaysOnTop" : gui_zpos:= ""
+		option_noactiv8:= false ;testing
+		option_noactiv8? gui_noactiv8:= "NA" : gui_noactiv8:= ""
+		option_posallCenter:= true ;testing
+		option_posallCenter? gui_pos := "Center" : ()
 		gui,Pwner:-Caption %gui_zpos%
 		return,
 
 		inratio:
-		loop 
-			if ((CURRENT_H*a_index)> a_screenheight )m{
+		;if (CURRENT_H<a_screenheight)
+		loop {
+			if ((CURRENT_H*a_index)> a_screenheight )
+			{
 			multipliera:= a_index - 1
 				break,
 			}
+		} ;	if (CURRENT_W<a_screenwidth)
 		loop
 			if ((CURRENT_H*a_index)> a_screenwidth ) {
 				multiplierb:= a_index - 1
@@ -486,7 +492,7 @@ menu,Tray,Icon,% "Exit",%			"C:\Icon\24\head_fk_a_24_c2b.ico"
 return,
 
 Varz:
-global hgui,RECT,Xcret10nnit,Image_Title,ImagePath,x10n,CURRENT_H,CURRENT_W,Pwner,opt_allCenter,pic_arr,Options,Curr_i,hovered,OWin,OControl,hGui,hovered,RECT,mdc,lbutton_click_thresh,rbutton_cooldown,turds,Curr_i,Starting_file,OutNameNoExt,_i_ndx_,Max_i,Curr_iOLD1,Curr_iOLD2,Options,pic0,pic1,pic2,xcent,ycent,repent,hi,wi,Recurse,opt_MaxFill,opt_ShrinkFill,alignment,ren,hovered,keys,r3gk3y,ID_VIEW_VARIABLES:=65407,ID_TRAY_EDITSCRIPT:=65304,ID_TRAY_SUSPEND:=65305,ID_TRAY_PAUSE:=65306.ID_TRAY_EXIT:=65307,ID_TRAY_RELOADSCRIPT:=65303,_nx:=0,_ny:=0,_Netnx:=0,_Netny:=0,netnxold,netnyold,netxt,netyTemp,netx,nety,opt_Anchor,ftypes,keys,sometrigger
+global hgui,RECT,Xcret10nnit,Image_Title,ImagePath,x10n,CURRENT_H,CURRENT_W,Pwner,option_allCenter,pic_arr,Options,Curr_i,hovered,OWin,OControl,hGui,hovered,RECT,mdc,lbutton_click_thresh,rbutton_cooldown,turds,Curr_i,Starting_file,OutNameNoExt,_i_ndx_,Max_i,Curr_iOLD1,Curr_iOLD2,Options,pic0,pic1,pic2,xcent,ycent,repent,hi,wi,Recurse,opt_MaxFill,opt_ShrinkFill,alignment,ren,hovered,keys,r3gk3y,ID_VIEW_VARIABLES:=65407,ID_TRAY_EDITSCRIPT:=65304,ID_TRAY_SUSPEND:=65305,ID_TRAY_PAUSE:=65306.ID_TRAY_EXIT:=65307,ID_TRAY_RELOADSCRIPT:=65303,_nx:=0,_ny:=0,_Netnx:=0,_Netny:=0,netnxold,netnyold,netxt,netyTemp,netx,nety,opt_Anchor,ftypes,keys,sometrigger
 , r3gk3y:="HKCU\SOFTWARE\_MW\image_view"
 , opt_movecenter:= True ;testing
 
