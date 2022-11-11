@@ -17,7 +17,7 @@ mouse movable
 
 position anchor when viewing consecutive images (mouse wheel up down to increment and decrement through the surrounding image files optionally recusive*)
 
+; bug: relative repositioning; mental blank on way to implement for repeted adjustments,  works off the centre being percieved initation point pre offset.
 
-; bug: opening filename with similarly named folder under the initial location, containing a simillarly named filename not being needled correctly.
 
-; bug: relative repositioning; mental blank on way to implement, works off the centre being percieved initation point pre offset.
+fixed ; bug: opening filename with similarly named folder under the initial location, containing a simillarly named filename not being needled correctly.
