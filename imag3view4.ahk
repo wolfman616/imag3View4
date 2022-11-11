@@ -1,14 +1,15 @@
 ﻿PiD:= DllCall("GetCurrentProcessId")
 (imgv_instance:= winexist("imgvi3w4 ahk_class AutoHotkeyGUI",,"ahk_pid " . PID)? exitapp())
-if (!instr(A_AhkPath,"UIA")&&!A_IsCompiled){
-	Run, %A_AhkPath%\..\AutoHotkeyU64_UIA.exe "%A_ScriptFullPath%" "%1%"
+if (!instr(A_AhkPath,"UIA")&&!A_IsCompiled) {
+	run,%A_AhkPath%\..\AutoHotkeyU64_UIA.exe "%A_ScriptFullPath%" "%1%"
 	ExitApp
 }
 menu,tray,icon
 ListLines,Off
 Setworkingdir,% (ahkexe:= splitpath(A_AhkPath)).dir 	;
-#NoEnv ; #IfTimeout,200 ;* DANGER * : Performance impact if set too low. *think about using this*.
+#NoEnv 
 #NoTrayIcon
+#IfTimeout,200 ;* DANGER * : Performance impact if set too low. *think about using this*.
 #SingleInstance,Force
 DetectHiddenWindows,On
 DetectHiddenText,	On
@@ -153,24 +154,21 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 		} else,msgbox,error
 	} ;msgbox % paths
 
-	(!Max_i? msgb0x("Error!", "Error no max`n:("))	;gui, Pwner: Add, Button, xp y+10 w80 h24 gpl_wib hwndhwndPlayPause, Pause
+	(!Max_i? msgb0x("Error!", "Error no max`n:("))
 	return,oio
 
-	upd8:	; tt(  pic_arr[oio] "`n" wwi "`n" hhi "`n" )
+	upd8:
 	if ((_netnx>a_screenwidth) && (_netny>a_screenheight)) {
 			_Netnx:=0
 			_Netny:=0
 		}
-	;if !(_nx=0)&&!(_ny=0) 
-		gpos:= wingetpos(hgui)
+	gpos:= wingetpos(hgui)
 	(netx?netxold2:= netx), (nety?netyold2:= nety)
 	(!(_nx -gpos.x =0)?netx:=_nx -gpos.x)
 	(!(_ny -gpos.y =0)?nety:=_ny -gpos.y)
 	_nxold:=_nx, _nyold:=_ny
-	CURRENT_W_old:= CURRENT_W
-	CURRENT_h_old:= CURRENT_H
-	_nx:= round(xcent -(CURRENT_W*0.5))
-	_ny:= round(ycent -(CURRENT_H*0.5)) ; center alignment
+	CURRENT_W_old:= CURRENT_W,	CURRENT_h_old:= CURRENT_H
+	_nx:= round(xcent -(CURRENT_W*0.5)), _ny:= round(ycent -(CURRENT_H*0.5)) ; center alignment
 	if (opt_movecenter) {  ;&& !(_Netnx="") && !(_Netny=""))
 		 _nx -=Netx
 		(_nx>a_screenwidth-CURRENT_W)?_nx:=a_screenwidth-CURRENT_W
@@ -410,7 +408,7 @@ opacity:= 255
 DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P",CURRENT_W|CURRENT_H<<32
 , "Uint",mdc,"int64P",0,"Uint", 0,"intP",(opacity--)<<16|1<<24,"Uint",2) ;msgbox % _nx " " _nY
 win_move(hGui,_nx +1,_ny +1,"","","")
-loop 60 {
+loop,60 {
 	(opacity<10? opacity:=10)
 	win_move(hGui,_nx+(a_index **2.5),_ny +a_index *2,"","","")
 	DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P",CURRENT_W|CURRENT_H<<32
@@ -428,17 +426,16 @@ return,
 
 AHK_NOTIFYICON(wParam,lParam) {
 	switch lParam {
-	;	case 0x0206: 	; WM_RBUTTONDBLCLK
-	;	case 0x020B:	; WM_XBUTTONDOWN
-		case 0x0201: 	; WM_LBUTTONDOWN
-	return,
-	;	case 0x0202: 	; WM_LBUTTONUP
-		case 0x0204: 	; WM_RBUTTONUP
+	;	case 0x0206: 		; WM_RBUTTONDBLCLK
+	;	case 0x020B:		; WM_XBUTTONDOWN
+		case 0x0201: return ; WM_LBUTTONDOWN
+	;	case 0x0202: 		; WM_LBUTTONUP
+		case 0x0204: 		; WM_RBUTTONUP
 			Menu,Tray,Show
 		case 0x0203:		; WM_LBUTTONDBLCLK
 			timer("ID_VIEW_VARIABLES",-1)
 			tt("Loading...","tray",1)
-		case 0x0208:	; WM_MBUTTONUP
+		case 0x0208:		; WM_MBUTTONUP
 			timer("ID_TRAY_RELOADSCRIPT",-1)
 			tt("Reloading...","tray",1)
 }	}
@@ -503,7 +500,6 @@ VarSetCapacity(RECT,16)
 
 if !ImagePath && If (!FileExist(ImagePath:=A_AppData "\" ScriptName "\appifyerFrame.png"))
 	ImagePath := remoteResource("appifyerFrame.png", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Modern_AutoHotkey_Logo_%28no_text%29.svg/330px-Modern_AutoHotkey_Logo_%28no_text%29.svg.png")
-
 return,
 
 donothing:
