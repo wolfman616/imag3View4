@@ -32,7 +32,7 @@ onmessage(0x00A1,"WM_NCLBUTTONDOWN")
 onmessage(0x0101,"WM_KEYUP")
 
 opt_Anchor:= True ; anchor session to position last used.
-
+ftypes:=[]
 ftypes:= ["png","jpg","gif","bmp","ico","xcf","tiff","cur","ani"]
 
 keys:= "~wheelup,~wheeldown,~left,~right,~wheelleft,~wheelright,~=,~-,~#r"
@@ -139,9 +139,9 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 	 if targetpath {
 			SplitPath, A_LoopFileFullPath , , , xTnz0n
 					switch xTnz0n {
-						case "png","jpg","gif","bmp","ico","xcf","tiff","cur","ani":
+						case ftypes[1],ftypes[2],ftypes[3],ftypes[4],ftypes[5],ftypes[6],ftypes[7],ftypes[8],ftypes[9]:
 							pic_arr[ a_index ]:= ({"CurrPath" : A_LoopFileFullPath : "xtn" : xTnz0n })
-							 if(A_LoopFileFullPath = inp4th) ;if(A_LoopFileFullPath = inp4th)
+							 if(A_LoopFileFullPath=inp4th) ;if(A_LoopFileFullPath = inp4th)
 								  oio:=  a_index ; paths .= A_LoopFileFullPath . "`n"
 					}
 				Max_i:=  a_index
@@ -465,24 +465,24 @@ menu() {
 
 menus:
 menu,Tray,NoStandard
-menu,Tray,icon,% "C:\Icon\256\eyedfyeye.ico"
-menu,Tray,Add ,% "Open",			ID_VIEW_VARIABLES
-menu,Tray,Icon,% "Open",%			"C:\Icon\24\Gterminal_24_32.ico"
+menu,Tray,icon,% "imag3view4.ico"
+menu,Tray,Add ,% "Open",	ID_VIEW_VARIABLES
+menu,Tray,Icon,% "Open",%	"C:\Icon\24\Gterminal_24_32.ico"
 menu,Tray,Add,% "preserve position characteristics", MenHandla
 if opt_movecenter
  menu,Tray,icon,% "preserve position characteristics",% "C:\Icon\256\ticAMIGA.ico"
 if !A_IsCompiled {
- menu,Tray,Add ,% "Edit Script",		ID_TRAY_EDITSCRIPT
+ menu,Tray,Add ,% "Edit Script",	ID_TRAY_EDITSCRIPT
  menu,Tray,Icon,% "Edit Script",%	"C:\Icon\24\explorer24.ico"
 }
-menu,Tray,Add ,% "Reload",			ID_TRAY_RELOADSCRIPT
-menu,Tray,Icon,% "Reload",%			"C:\Icon\24\eaa.bmp"
-menu,Tray,Add ,% "Suspend VKs",		ID_TRAY_SUSPEND
-menu,Tray,Icon,% "Suspend VKs",%	"C:\Icon\24\head_fk_a_24_c1.ico"
-menu,Tray,Add ,% "Pause",			ID_TRAY_PAUSE
-menu,Tray,Icon,% "Pause",%			"C:\Icon\24\head_fk_a_24_c2b.ico"
-menu,Tray,Add ,% "Exit",			ID_TRAY_EXIT
-menu,Tray,Icon,% "Exit",%			"C:\Icon\24\head_fk_a_24_c2b.ico"
+menu,Tray,Add ,% "Reload",		ID_TRAY_RELOADSCRIPT
+menu,Tray,Icon,% "Reload",%		"C:\Icon\24\eaa.bmp"
+menu,Tray,Add ,% "Suspend VKs",	ID_TRAY_SUSPEND
+menu,Tray,Icon,% "Suspend VKs",% "C:\Icon\24\head_fk_a_24_c1.ico"
+menu,Tray,Add ,% "Pause",		ID_TRAY_PAUSE
+menu,Tray,Icon,% "Pause",%		"C:\Icon\24\head_fk_a_24_c2b.ico"
+menu,Tray,Add ,% "Exit",		ID_TRAY_EXIT
+menu,Tray,Icon,% "Exit",%		"C:\Icon\24\head_fk_a_24_c2b.ico"
 return,
 
 Varz:
