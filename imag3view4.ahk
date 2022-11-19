@@ -1,5 +1,7 @@
-﻿#NoTrayIcon
+﻿#NoEnv 
+#NoTrayIcon
 #SingleInstance,Force
+#IfTimeout,200 ;* DANGER * : Performance impact if set too low. *think about using this*.
 PiD:= DllCall("GetCurrentProcessId")
 (imgv_instance:= winexist("imgvi3w4 ahk_class AutoHotkeyGUI",,"ahk_pid " . PID)? exitapp())
 if (!instr(A_AhkPath,"UIA")&&!A_IsCompiled) {
@@ -9,8 +11,6 @@ if (!instr(A_AhkPath,"UIA")&&!A_IsCompiled) {
 menu,tray,icon
 ListLines,Off
 Setworkingdir,% (ahkexe:= splitpath(A_AhkPath)).dir 	;
-#NoEnv 
-#IfTimeout,200 ;* DANGER * : Performance impact if set too low. *think about using this*.
 DetectHiddenWindows,On
 DetectHiddenText,	On
 SetTitleMatchMode,	2
@@ -19,9 +19,9 @@ SetBatchLines,		-1
 SetWinDelay,		-1
 coordMode,	ToolTip,Screen
 coordmode,	Mouse,	Screen
-
 loop,parse,% "Reg_Read,Varz,Menus,Binds,opt_enact",`,
 	gosub(A_loopfield)
+	
 onexit,Leave_
 onmessage(0x0204,"WM_lRBUTTONDOWN")
 onmessage(0x0205,"WM_lrBUTTONUP")
@@ -63,7 +63,7 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 	} else try {
 		critical
 		OPT_Benchmark? a_scriptStartTime:= a_tickCount : ()
-		gui,pic: New,-DPIScale +ParentPwner +AlwaysOnTop +ToolWindow ;+E0x80000 ,
+		gui,pic: New,-DPIScale +ParentPwner +AlwaysOnTop +ToolWindow ;+E0x80000
 		gui,pic: +LastFound -Caption -SysMenu +OwnDialogs
 		hwnd_pic:= WinExist(), Curr_File:= pic_arr[oio:=i].CurrPath
 		pToken:= Gdip_Startup()
@@ -81,7 +81,7 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 			goto,DC_stuff
 		else,if opt_MaxFill || if opt_ShrinkFill
 			goto,shrinkxpand
-		else,if ((CURRENT_W) > a_screenwidth && CURRENT_H > a_screenheight)
+		else,if(CURRENT_W>a_screenwidth && CURRENT_H>a_screenheight)
 			goto,shrinkxpand
 		else,goto,DC_stuff
 			return,
@@ -108,14 +108,14 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 		return,
 
 		inratio:
-		loop 
-			if ((CURRENT_H*a_index)> a_screenheight ) {
-				multipliera:= a_index - 1
+		loop,
+			if((CURRENT_H*a_index)>a_screenheight ) {
+				multipliera:= a_index -1
 				break,
 			}
 		loop,
-			if ((CURRENT_H*a_index)> a_screenwidth ) {
-				multiplierb:= a_index - 1
+			if((CURRENT_H*a_index)>a_screenwidth ) {
+				multiplierb:= a_index -1
 				break,
 			}
 		result:= (multipliera<multiplierb) ? multipliera : multiplierb
@@ -134,147 +134,127 @@ Xcrete(i="",lab3l="",h_key="",inp4th="") {
 	gui,	Pwner:+LastFound -Caption -DPIScale +ToolWindow +E0x80000 +HWNDhGui  ; hGui := WinExist()
 	Loop,	Files,% Image_dir "\*.*",% Recurse
 	{	; Trim(A_LoopFileFullPath) "'"
-		targetpath	:=	LTrim(A_LoopFileFullPath)
-		targetpath	:=	RTrim(targetpath)
+		targetpath:= LTrim(A_LoopFileFullPath), targetpath:= RTrim(targetpath)
 	 if targetpath {
-			SplitPath, A_LoopFileFullPath , , , xTnz0n
+			SplitPath,A_LoopFileFullPath,,,xTnz0n
 					switch xTnz0n {
 						case ftypes[1],ftypes[2],ftypes[3],ftypes[4],ftypes[5],ftypes[6],ftypes[7],ftypes[8],ftypes[9]:
 							pic_arr[ a_index ]:= ({"CurrPath" : A_LoopFileFullPath : "xtn" : xTnz0n })
 							 if(A_LoopFileFullPath=inp4th) ;if(A_LoopFileFullPath = inp4th)
-								  oio:=  a_index ; paths .= A_LoopFileFullPath . "`n"
+								  oio:= a_index ; paths .= A_LoopFileFullPath . "`n"
 					}
-				Max_i:=  a_index
+				Max_i:= a_index
 		} else,msgbox,error
-	} ;msgbox % paths
-
+	}
 	(!Max_i? msgb0x("Error!", "Error no max`n:("))
 	return,oio
-
+	
 	upd8:
-	if ((_netnx>a_screenwidth) && (_netny>a_screenheight)) {
-			_Netnx:=0
-			_Netny:=0
-		}
+	if((_netnx>a_screenwidth)&&(_netny>a_screenheight))
+		_Netnx:=0, _Netny:=0
 	gpos:= wingetpos(hgui)
-	(netx?netxold2:= netx), (nety?netyold2:= nety)
-	(!(_nx -gpos.x =0)?netx:=_nx -gpos.x)
-	(!(_ny -gpos.y =0)?nety:=_ny -gpos.y)
-	_nxold:=_nx, _nyold:=_ny
-	CURRENT_W_old:= CURRENT_W,	CURRENT_h_old:= CURRENT_H
-	_nx:= round(xcent -(CURRENT_W*0.5)), _ny:= round(ycent -(CURRENT_H*0.5)) ; center alignment
-	if (opt_movecenter) {  ;&& !(_Netnx="") && !(_Netny=""))
+	(netx? netxold2:= netx), (nety?netyold2:= nety)
+	(!(_nx-gpos.x=0)? netx:= _nx-gpos.x)
+	(!(_ny-gpos.y=0)? nety:= _ny-gpos.y)
+	_nxold:=_nx, _nyold:=_ny, CURRENT_W_old:= CURRENT_W, CURRENT_h_old:= CURRENT_H
+	_nx:= round(xcent-(CURRENT_W*0.5)), _ny:= round(ycent-(CURRENT_H*0.5)) ; center alignment
+	if(opt_movecenter) {
 		 _nx -=Netx
-		(_nx>a_screenwidth-CURRENT_W)?_nx:=a_screenwidth-CURRENT_W
-		(_nx<0)?_nx:=0
-		_ny -= Nety ; msgbox % _Netnx "`n" _nx
-		(_ny>a_screenheight-CURRENT_h)?_ny:=a_screenheight-CURRENT_h
-		(_ny<0)?_ny:=0
+		(_nx>a_screenwidth-CURRENT_W)? _nx:=a_screenwidth-CURRENT_W
+		(_nx<0? _nx:=0)
+		_ny -=Nety
+		(_ny>a_screenheight-CURRENT_h)? _ny:=a_screenheight-CURRENT_h
+		(_ny<0? _ny:=0)
 	}
-	DllCall("UpdateLayeredWindow", "Uint", hGui, "Uint", 0, "Uint", 0, "int64P", CURRENT_W|CURRENT_H<<32
-	, "Uint", mDC, "int64P", 0, "Uint", 0,    "intP", 0xFF<<16|1<<24, "Uint", 2) ;msgbox % _nx " " _nY
+	DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P",CURRENT_W|CURRENT_H<<32
+	,"Uint",mDC,"int64P",0,"Uint",0,"intP",0xFF<<16|1<<24,"Uint",2) ;msgbox % _nx " " _nY
 	gui,Pwner: Show,%gui_noactiv8% x%_nx% y%_ny% w%CURRENT_w% h%CURRENT_H%
-	IF OPT_BENCHMARK {
-		_:= (a_tickCount-a_scriptStartTime) . " Ms"
-		TT(_)
-	}
+	(OPT_BENCHMARK? _:= (a_tickCount-a_scriptStartTime) . " Ms", TT(_))
 
 	delete:
 	GDI_SelectObject(mDC,oBM)
-	Gdi_DeleteObject(mBM) ;Gdi_DeleteDC(mDC)
+	Gdi_DeleteObject(mBM) ; Gdi_DeleteDC(mDC)
 	Gdip_DeleteGraphics(g2)
 	Gdip_DisposeImage(pImage)
 	Gdip_DisposeImage(pbitmap)
 	return,
 
 	old_delete:
-	gui, pic:destroy
+	gui,pic:destroy
 	Gdip_Shutdown(pToken)
 	return,
 
 	keys_lablL:
 	MouseGetPos,,,OWin,OControl ; 1|2|3
 	((OWin = hGui)? hovered:=True : (hovered:=False))
-	(!h_key?	msgb0x("error"))
+	(!h_key? msgb0x("error"))
 	(instr(h_key, "~")? h_key:= strreplace(h_key,"~"):(h_key:= h_key))
-	iOLD2 := iOLD1,	iOLD1 := oio ; msgbox % hGui " " hovered
-	ifwinNotActive, ahk_id %hGui%
+	iOLD2:= iOLD1, iOLD1:= oio
+	ifwinNotActive,ahk_id %hGui%
 		&& if !hovered
 			return,
-
 	switch h_key { ;case  "NumpadAdd":
-		case "=": opt_MaxFill:=!opt_MaxFill
+		case,"=": opt_MaxFill:=!opt_MaxFill
 		(opt_MaxFill? nety? (netyTemp:= nety,nety := 0) :
 		, (netyTemp?nety:= netyTemp)) ;keeps x offset when maximized	
-		case "-": opt_ShrinkFill:=!opt_ShrinkFill
-		case "right","wheeldown": curr_i:= refrec(1) ;curr_i:= (oio<Max_i? oio += 1 : oio:= 1)
-			return
-		case "^right","~^wheeldown","~^wheelright": curr_i:= refrec(5) ;curr_i:= (oio<Max_i? oio += 5 : oio:= 1)
-			return
-		case "left","~wheelup","wheelup": curr_i:= refrec(-1) ;curr_i:= (oio>0? oio -= 1 : oio:= Max_i)
+		case,"-": opt_ShrinkFill:=!opt_ShrinkFill
+		case,"right","wheeldown": curr_i:= refrec(1) ;curr_i:= (oio<Max_i? oio += 1 : oio:= 1)
 			return,
-		case "^left","~^wheelup","~^wheelleft": curr_i:= refrec(-5)
+		case,"^right","~^wheeldown","~^wheelright": curr_i:= refrec(5) ;curr_i:= (oio<Max_i? oio += 5 : oio:= 1)
 			return,
-		case "delete":
-			ifwinnotActive,ahk_id %hGui%
-				return,
+		case,"left","~wheelup","wheelup": curr_i:= refrec(-1) ;curr_i:= (oio>0? oio -= 1 : oio:= Max_i)
+			return,
+		case,"^left","~^wheelup","~^wheelleft": curr_i:= refrec(-5)
+			return,
+		case,"delete": ifwinnotActive,ahk_id %hGui%
+			return,
+
 			FileRecycle,% pic_arr[oio].CurrPath
-			tt(pic_arr[oio].CurrPath "`nSent to the recycle bin", 1300)
+			tt(pic_arr[oio].CurrPath "`nSent to the recycle bin",1300)
 			return,
-		case	 "#r":
-			reload,
+		case,"#r": reload,
 	}
 
 	switch pic_arr[oio].xtn {
-		case "ico":
-			tt("ico file", 3000)
-		case "gif":
-			tt("gif file", 3000)
-		case "default":
-			tt(pic_arr[oio].xtn " file.")
+		case "ico": tt("ico file",3000)
+		case "gif":	tt("gif file",3000)
+		case "default": tt(pic_arr[oio].xtn " file.")
 	}
 	Xcrete(oio)
 	Xcrete(oio,"upd8")
-	(!(iold2 = oio)?Xcrete(iOLD2,"old_delete"))
+	(!(iold2=oio)? Xcrete(iOLD2,"old_delete"))
 	return,
 }
 
-WM_lrBUTTONDOWN(wParam, lParam,byref RECT, mDC) {
-	global lbutton_cooldown,lbd,sometrigger:= true	; tt("LB: D")
-	xs := lParam & 0xffff,	ys := lParam >> 16
-	pToken00:=Gdip_Startup() ; msgbox % mDC
-	   mDC00:=Gdi_CreateCompatibleDC(0)
+WM_lrBUTTONDOWN(wParam,lParam,byref RECT,mDC) {
+	global lbutton_cooldown, lbd, sometrigger:= true	; tt("LB: D")
+	xs:= lParam &0xffff,	ys:= lParam>>16
+	pToken00:= Gdip_Startup() ; msgbox % mDC
+	   mDC00:= Gdi_CreateCompatibleDC(0)
 	DllCall("gdi32.dll\SetStretchBltMode","Uint",mDC,"int",1)
 	DllCall("gdi32.dll\StretchBlt","UInt",mDC00,"Int",0,"Int",0,"Int"
-	,CURRENT_W,"Int",CURRENT_h,"UInt",mDC%oio%, "UInt",0
+	,CURRENT_W,"Int",CURRENT_h,"UInt",mDC%oio%,"UInt",0
 	,"UInt",0,"Int",0.5*CURRENT_W,"Int",CURRENT_h,"UInt",0x00CC0020)  ; SRCCOPY=0x00CC0020
-	DllCall("UpdateLayeredWindow","Uint",hGui,"Uint", 0,"Uint",0,"int64P"
+	DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P"
 	,CURRENT_W|CURRENT_H<<32
 	,"Uint",mDC00,"int64P",0,"Uint",0,"intP",0xFF<<16|1<<24,"Uint",2) ; msgbox % _nx " " _nY
-	settimer, disgrace, -40
+	settimer,disgrace,-40
 	timer("lbutton_cooldown_reset",-400)
-
-	While,(LbD:=GetKeyState("lbutton","P") || lbd:=GetKeyState("lbutton","P")) {
-		DllCall( "GetCursorPos","Uint",&RECT)
-			sleep,4
-		win_move(hgui,(NumGet(&RECT,0,"Int") - xs),(NumGet(&RECT,4,"Int") - ys),CURRENT_W,CURRENT_H,0x4001) ; DllCall("MoveWindow",  "Uint",hwnd1,"int",vWinX,"int",vWiny,"int",rw,"int",rh,"Int",2) #
+	While,(LbD:= GetKeyState("lbutton","P")||lbd:= GetKeyState("lbutton","P")) {
+		DllCall("GetCursorPos","Uint",&RECT)
+		sleep,4
+		win_move(hgui,(NumGet(&RECT,0,"Int") -xs),(NumGet(&RECT,4,"Int") -ys),CURRENT_W,CURRENT_H,0x4001) ; DllCall("MoveWindow",  "Uint",hwnd1,"int",vWinX,"int",vWiny,"int",rw,"int",rh,"Int",2) #
 		if sometrigger
 			settimer,grace,-400
 		if !lbd {
-			settimer WM_lrBUTTONup,-150
+			settimer,WM_lrBUTTONup,-150
 			return,0
-		}
-	}
-
+	}	}
 	grace:
-	sometrigger:= true
-	return,
-
 	disgrace:
-	sometrigger:= false
+	(instr(a_thislabel,"dis")? sometrigger:= false : sometrigger:= true)
 	return,
 }
-
 
 WM_lrBUTTONup(wParam="", lParam="") { 	;toggles maximise fill
 	global sometrigger, LbD:=""
@@ -283,33 +263,28 @@ WM_lrBUTTONup(wParam="", lParam="") { 	;toggles maximise fill
 		return,
 }	}
 
-WM_LBUTTONDBLCLK(wParam, lParam,byref RECT, mDC) {
+WM_LBUTTONDBLCLK(wParam,lParam,byref RECT,mDC) {
 	global lbutton_cooldown_reset,oio,Curr_File
 	if !lbutton_cooldown_reset {
-		opt_MaxFill:=!opt_MaxFill
-		main(Curr_File)
+		opt_MaxFill:=!opt_MaxFill, main(Curr_File)
 		return,
-		;tt("Placeholder - toggle some size change or zoom to predefined coord?")
-		;toggle bg col	}
 	}
-	opt_MaxFill:=!opt_MaxFill
-	main(Curr_File)
-	tt("LB: U")
+	opt_MaxFill:=!opt_MaxFill, main(Curr_File), tt("LB: U")
 }
 
 WM_RBUTTONDOWN(byref wParam,byref lParam,byref RECT) {
-tt("aadawad")
- global hGui,rbutton_cooldown:=false
-	settimer rbutton_cooldown_reset, -670
-	xs := lParam & 0xffff,	ys := lParam >> 16
-	DllCall("SetWindowBand", "ptr",hGui, "ptr", 0, "uint", 15)
+	global hGui,rbutton_cooldown:=false
+	tt("aadawad")
+	settimer,rbutton_cooldown_reset,-670
+	xs:= lParam &0xffff,	ys:= lParam>>16
+	DllCall("SetWindowBand","ptr",hGui,"ptr",0,"uint",15)
 	tt(a_lasterror)
 	While,GetKeyState("rbutton","P") {
 		if !GetKeyState("rbutton","P")
 			return,
 		DllCall("GetCursorPos","Uint",&RECT)
-		vWinX:= NumGet(&RECT,0,"Int") - xs
-		vWinY:= NumGet(&RECT,4,"Int") - ys
+		vWinX:= NumGet(&RECT,0,"Int")-xs
+		vWinY:= NumGet(&RECT,4,"Int")-ys
 		win_move(hGui,vWinX,vWiny,"","","")
 		sleep,4
 }	}
@@ -329,43 +304,36 @@ WM_rBUTTONup(byref wParam="",byref lParam="") {
 WM_KEYUP(wParam,lParam) {
 	global hWnd_Par
 	switch wParam {
-		case "37": curr_i:= refrec(-1) ;left arrow
+		case "37" : curr_i:= refrec(-1) ;left arrow
 			sleep 40
-		case "39": curr_i:= refrec(1) ;r arrow
+		case "39" : curr_i:= refrec(1) ;r arrow
 			sleep 40
-		case "27 ": settimer,guiclose,-1 ;esc
-		case "13": ;enter
-			gui,par: submit,nohide
-			;gosub,editx
-			;gosub,edity
-			;gosub,Timertest2
-			send,{tab}
+		case "27 " : settimer,guiclose,-1 ;esc
+		case "13" : gui,par: submit,nohide ;enter
+			send,{tab} ;gosub,editx ;gosub,edity ;gosub,Timertest2
 		default: tt(wParam "`n" Format("{1:#x}",lParam))  ; case "":
 }	}
 
-
 refrec(incdec=0) {
 	global
-	if (incdec<0)
-		 curr_i:= ((oio>abs(incdec))? oio += incdec : (oio:= Max_i))
-	else,curr_i:= ((oio<(Max_i))? oio += incdec : (oio:= 1))
+	((incdec<0)? (curr_i:= ((oio>abs(incdec))? oio +=incdec : (oio:= Max_i))) :
+	,(curr_i:= ((oio<(Max_i))? oio +=incdec : (oio:= 1))))
 	Xcrete(curr_i)
 	sleep.20
 	Xcrete(oio,"upd8")
-	(!(iold2 = oio)?Xcrete(iOLD2,"old_delete"))
+	(!(iold2=oio)?Xcrete(iOLD2,"old_delete"))
 	return,curr_i
 }
 
 keys_labl:
-Xcrete(Curr_i, ( a_thislabel . "L" ), a_thishotkey)
+Xcrete(Curr_i,( a_thislabel . "L" ),a_thishotkey)
 return,
 
 opt_enact:
-if opt_movecenter {
+if opt_movecenter
 	menu,Tray,icon,% "preserve position characteristics",% "C:\Icon\256\ticAMIGA.ico" 
-} else {
-	menu,Tray,icon,% "preserve position characteristics",% ""
-}
+else,menu,Tray,icon,% "preserve position characteristics",% ""
+
 return,
 
 rbutton_cooldown_reset:
@@ -385,13 +353,13 @@ loop,3 {
 return,
 
 reg_read:
-loop,parse,% ( Options := "opt_ShrinkFill,opt_MaxFill,alignment,recurse" ),`,
-	regread, %a_loopfield%,% r3gk3y,%a_loopfield%
+loop,parse,% ( Options:= "opt_ShrinkFill,opt_MaxFill,alignment,recurse" ),`,
+	regread,%a_loopfield,% r3gk3y,% a_loopfield
 return,
 
 reg_WRite:
 alignment:="center"
-loop,parse,% ( Options:= "opt_ShrinkFill,opt_MaxFill,alignment,recurse" ),`,
+loop,parse,% Options:= "opt_ShrinkFill,opt_MaxFill,alignment,recurse" ,`,
 	regwrite,% "REG_SZ",% r3gk3y,% a_loopfield,% %a_loopfield%
 return,
 
@@ -400,13 +368,13 @@ GuiClose:
 GuiEscape:
 opacity:= 255
 DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P",CURRENT_W|CURRENT_H<<32
-, "Uint",mdc,"int64P",0,"Uint", 0,"intP",(opacity--)<<16|1<<24,"Uint",2) ;msgbox % _nx " " _nY
+, "Uint",mdc,"int64P",0,"Uint", 0,"intP",(opacity--)<<16|1<<24,"Uint",2)
 win_move(hGui,_nx +1,_ny +1,"","","")
 loop,60 {
 	(opacity<10? opacity:=10)
 	win_move(hGui,_nx+(a_index **2.5),_ny +a_index *2,"","","")
 	DllCall("UpdateLayeredWindow","Uint",hGui,"Uint",0,"Uint",0,"int64P",CURRENT_W|CURRENT_H<<32
-	, "Uint",mdc,"int64P",0,"Uint",0,"intP",(opacity-=6.6)<<16|1<<24,"Uint",2) ;msgbox % _nx " " _nY
+	, "Uint",mdc,"int64P",0,"Uint",0,"intP",(opacity-=6.6)<<16|1<<24,"Uint",2)
 }
 sleep,500
 exitapp,
@@ -420,17 +388,14 @@ return,
 
 AHK_NOTIFYICON(wParam,lParam) {
 	switch lParam {
-	;	case 0x0206: 		; WM_RBUTTONDBLCLK
-	;	case 0x020B:		; WM_XBUTTONDOWN
-		case 0x0201: return ; WM_LBUTTONDOWN
-	;	case 0x0202: 		; WM_LBUTTONUP
-		case 0x0204: 		; WM_RBUTTONUP
-			Menu,Tray,Show
-		case 0x0203:		; WM_LBUTTONDBLCLK
-			timer("ID_VIEW_VARIABLES",-1)
+	;	case 0x0206: 		 ;WM_RBUTTONDBLCLK
+	;	case 0x020B:		 ;WM_XBUTTONDOWN
+		case 0x0201: return, ;WM_LBUTTONDOWN
+	;	case 0x0202: 		 ;WM_LBUTTONUP
+		case 0x0204: Menu,Tray,Show	;WM_RBUTTONUP
+		case 0x0203: timer("ID_VIEW_VARIABLES",-1) ; WM_LBUTTONDBLCLK
 			tt("Loading...","tray",1)
-		case 0x0208:		; WM_MBUTTONUP
-			timer("ID_TRAY_RELOADSCRIPT",-1)
+		case 0x0208: timer("ID_TRAY_RELOADSCRIPT",-1) ; WM_MBUTTONUP
 			tt("Reloading...","tray",1)
 }	}
 
@@ -447,11 +412,10 @@ global ID_TRAY_PAUSE:= 65306
 ID_TRAY_EXIT:
 global ID_TRAY_EXIT:= 65307
 PostMessage,0x0111,(%A_Thislabel%),,,% A_ScriptName " - AutoHotkey"
-return,		;PostMessage,65307,%open%,,,% A_ScriptName " - AutoHotkey"
-
+return, ;PostMessage,65307,%open%,,,% A_ScriptName " - AutoHotkey"
 
 MenHandla(){
-	switch A_thismenuitem {
+	switch,A_thismenuitem {
 		case "preserve position characteristics": opt_movecenter:= !opt_movecenter
 		if opt_movecenter
 			menu,Tray,icon,% "Move Center",% "C:\Icon\256\ticAMIGA.ico"
@@ -459,29 +423,29 @@ MenHandla(){
 }	}
 
 menu() {
-	menu,new,add, testmenu, donothing
+	menu,new,add,testmenu,donothing
 	menu,new,show
 }
 
 menus:
 menu,Tray,NoStandard
 menu,Tray,icon,% "imag3view4.ico"
-menu,Tray,Add ,% "Open",	ID_VIEW_VARIABLES
+menu,Tray,Add,% "Open",	ID_VIEW_VARIABLES
 menu,Tray,Icon,% "Open",%	"C:\Icon\24\Gterminal_24_32.ico"
 menu,Tray,Add,% "preserve position characteristics", MenHandla
 if opt_movecenter
  menu,Tray,icon,% "preserve position characteristics",% "C:\Icon\256\ticAMIGA.ico"
 if !A_IsCompiled {
- menu,Tray,Add ,% "Edit Script",	ID_TRAY_EDITSCRIPT
+ menu,Tray,Add,% "Edit Script",	ID_TRAY_EDITSCRIPT
  menu,Tray,Icon,% "Edit Script",%	"C:\Icon\24\explorer24.ico"
 }
-menu,Tray,Add ,% "Reload",		ID_TRAY_RELOADSCRIPT
+menu,Tray,Add,% "Reload",		ID_TRAY_RELOADSCRIPT
 menu,Tray,Icon,% "Reload",%		"C:\Icon\24\eaa.bmp"
-menu,Tray,Add ,% "Suspend VKs",	ID_TRAY_SUSPEND
+menu,Tray,Add,% "Suspend VKs",	ID_TRAY_SUSPEND
 menu,Tray,Icon,% "Suspend VKs",% "C:\Icon\24\head_fk_a_24_c1.ico"
-menu,Tray,Add ,% "Pause",		ID_TRAY_PAUSE
+menu,Tray,Add,% "Pause",		ID_TRAY_PAUSE
 menu,Tray,Icon,% "Pause",%		"C:\Icon\24\head_fk_a_24_c2b.ico"
-menu,Tray,Add ,% "Exit",		ID_TRAY_EXIT
+menu,Tray,Add,% "Exit",			ID_TRAY_EXIT
 menu,Tray,Icon,% "Exit",%		"C:\Icon\24\head_fk_a_24_c2b.ico"
 return,
 
@@ -492,10 +456,8 @@ global hgui,RECT,Xcret10nnit,Image_Title,ImagePath,x10n,CURRENT_H,CURRENT_W,Pwne
 
 VarSetCapacity(RECT,16)
 
-if !ImagePath && If (!FileExist(ImagePath:=A_AppData "\" ScriptName "\appifyerFrame.png"))
-	ImagePath := remoteResource("appifyerFrame.png", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Modern_AutoHotkey_Logo_%28no_text%29.svg/330px-Modern_AutoHotkey_Logo_%28no_text%29.svg.png")
-return,
-
+if !ImagePath && If(!FileExist(ImagePath:=A_AppData "\" ScriptName "\appifyerFrame.png"))
+	ImagePath:= remoteResource("appifyerFrame.png", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Modern_AutoHotkey_Logo_%28no_text%29.svg/330px-Modern_AutoHotkey_Logo_%28no_text%29.svg.png")
 donothing:
 return,
 
@@ -506,5 +468,5 @@ gui,Pic:	destroy
 gui,Pwner:	destroy
 gosub,reg_WRite
 exitapp,
-loop,2
+loop,4
 	sleep,500
