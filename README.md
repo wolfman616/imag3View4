@@ -2,6 +2,7 @@
 A fast & simple image viewer to integrate into context menu/shell
 
 <img width="236" alt="Clipboarder 2022 11 11" src="https://user-images.githubusercontent.com/62726599/201299867-2456136d-e049-4127-b301-9cb64f22cffb.png">
+![Clipboarder 2023 05 02](https://user-images.githubusercontent.com/62726599/235603125-19105a71-127c-49b3-a126-228ccae3ecde.jpg)
 
 Features,
 alpha transparency support/visualisation options
