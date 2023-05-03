@@ -2,8 +2,7 @@
 A fast & simple image viewer to integrate into context menu/shell
 
 <img width="236" alt="Clipboarder 2022 11 11" src="https://user-images.githubusercontent.com/62726599/201299867-2456136d-e049-4127-b301-9cb64f22cffb.png">
-<![Clipboarder 2023 05 02](https://user-images.githubusercontent.com/62726599/235603248-72c64aeb-1a58-4ca1-adc8-7a177fc33907.jpg)>
-
+<img width="236" src="https://user-images.githubusercontent.com/62726599/235603422-acbcf625-ac1a-4dc7-9785-5f764dbc164f.jpg">
 Features,
 alpha transparency support/visualisation options
 alphachannel intact.
@@ -21,8 +20,6 @@ UI band.
 
 mouse movable
 
-relative centering position anchor when viewing consecutive images (mouse wheel up down to increment and decrement through the surrounding image files (optionally recusive*))
-
-; bug: relative repositioning; mental blank on way to implement anchor correctly for 1> repeted adjustments to the offset,  works off the centre being percieved initation point pre offset doesnt help.
+relative centering position anchoring working when viewing consecutive images (mouse wheel up down to increment and decrement through the surrounding image files (optionally recusive*))
 
 20fixed ; bug: opening filename with similarly named folder under the initial location, containing a simillarly named filename not being needled correctly.
