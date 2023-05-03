@@ -561,23 +561,23 @@ MenHandla(Enum="") {
 		case,"Open containing" : p:= Open_Containing(ImagePath)
 		case,"Copy path" : clipboard:= ImagePath
 		case,"Cut " . Image_Title . "." . x10n : invokeverb(ImagePath,"cut")
-		case,"Delete" : tt("  Sent-to Recycle-bin  ",1), filerecycle,% ImagePath
+		case,"Delete" : tt("  Sent-to Recycle-bin  ",1), filerecycle,%ImagePath%
 		case,"greyscale" : matrixapply:=true, matrix_:=MatrixGreyScale, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"), matrixapply:=false
-		case,"greyscale off" : matrixapply:=true, matrix_:=MatrixGreyScale, refrec(curr_i). Xcrete(oio),Xcrete(oio,"upd8"),greyscale:=true
+		case,"greyscale off" : matrixapply:=true, matrix_:=MatrixGreyScale, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),greyscale:=true
 		case,"greyscale on" : matrixapply:=false, matrix_:="", refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),greyscale:=false
 		case,"sepia" : matrix_:=GenerateColorMatrix(8), matrixapply:=true, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),matrixapply:=false
-		case,"sepia off" : matrixapply:=true, sepia:=true, matrix_:=GenerateColorMatrix(8), refrec(curr_i). Xcrete(oio),Xcrete(oio,"upd8"),
+		case,"sepia off" : matrixapply:=true, sepia:=true, matrix_:=GenerateColorMatrix(8), refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),
 		case,"sepia on" : matrixapply:=false,sepia:=false, matrix_:="",	refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8")
 		case,"alpha2greyscale1" : matrix_:=Matrix_Alpha1, matrixapply:=true, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),matrixapply:=false
 		case,"alpha2greyscale1 off" : matrixapply:=true, alpha2greyscale1:=true, matrix_:=Matrix_Alpha1, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),
 		case,"alpha2greyscale2 on" : matrixapply:=false,alpha2greyscale2:=false, matrix_:="", refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8")
 		case,"alpha2greyscale2" : matrix_:=Matrix_Alpha2, matrixapply:=true, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),matrixapply:=false
-		case,"alpha2greyscale2 off" : matrixapply:=true, alpha2greyscale2:=true. matrix_:=Matrix_Alpha2, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8")
+		case,"alpha2greyscale2 off" : matrixapply:=true, alpha2greyscale2:=true, matrix_:=Matrix_Alpha2, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8")
 		case,"alpha2greyscale2 on" : matrixapply:=false,alpha2greyscale2:=false, matrix_:="", refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8")
 		case,"invert" : matrix_:=GenerateColorMatrix(6), matrixapply:=true, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),matrixapply:=false
 		case,"invert off" : matrixapply:=true, invert:=true, matrix_:=GenerateColorMatrix(6), refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8"),
 		case,"invert on" : matrixapply:=false,invert:=false, matrix_:="", refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8")
-		case,"rotate 90 clockwise" : (rotate=270? (r90cw:=false, r90ccw:=false, rotate:="resetrot") : (r90cw:=true, r90ccw:=false, rotate+=90)
+		case,"rotate 90 clockwise" : (rotate=270? (r90cw:=false, r90ccw:=false, rotate:="resetrot") : (r90cw:=true, r90ccw:=false, rotate+=90))
 									refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8") ;rotate:=""
 		case,"rotate 90 anticlockwise"	: r90ccw:=true, r90cw:=false, rotate-=90, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8") ;rotate:=""
 		case,"rotate 180" 			: rotate:=180, refrec(curr_i), Xcrete(oio),Xcrete(oio,"upd8")	;rotate:=""
@@ -617,13 +617,6 @@ if(OPT_Topmost:=!OPT_Topmost) { ;uiband_set(hGui)
 	WinSet,AlwaysOnTop,On,ahk_id %hgui%
 } else,WinSet,AlwaysOnTop,Off,ahk_id %hgui%
 return, ;WinSet,Top,off,ahk_id %hgui%
-
-MenuTrayShow() {
-	global
-	trayActiv:= True
-	Menu,Tray,Show
-	trayActiv:= False
-}
 
 File_2_pBMP(Image) { ;Faster than GdipCreateBitmapFromFile *doesn't lock file.;
 	pStream:= FileGet(Image)
@@ -731,9 +724,10 @@ GuiMenu() {
 
 MenuTrayShow() {
 	global
+	trayActiv:= True
 	gosub,menus
 	Menu,Tray,Show
-	return
+	trayActiv:= False
 }
 
 menus:
